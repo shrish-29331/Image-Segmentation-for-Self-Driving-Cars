@@ -1,0 +1,2 @@
+usernames = ['student_1','student_2','ta_1','ta_2']
+passwords = {'student_1':'820c90047fc76b916d412d81ad14b32ae7ba4e1a135291fc620be3324de9e621', 'student_2':'4f1609a52bca6836b53ec588eea19b69c192ba9b617f9680ae7c5d02206fe575', 'ta_1':'0666f32686e98e2d90ef1f8ae8b4d87da9b53a613771182eb32d54bafdaa5d1c', 'ta_2':'18550f807e29bdbd3fab7bd2d8d671e88bdeab74b0b997a4065cc68ed89c14ae'}
