@@ -1,94 +1,110 @@
-# Assignment Auto Grader Portal
+# Image-Segmentation
+Road scene segmentation with DeepLabV3+ for self-driving cars. Includes TensorFlow model and visualization tools.
 
-A **Streamlit-based web portal** for seamless assignment submission and automatic evaluation. It provides dedicated interfaces for both students and evaluators (TAs), making the grading process efficient, secure, and insightful.
+**Live Demo:** https://image-segmentation-w3rdpbpx5clruaj9tamshp.streamlit.app/
 
----
+## Project Overview
+This project focuses on road scene segmentation using the DeepLabV3+ model, a state-of-the-art architecture for semantic image segmentation. The goal is to enable accurate segmentation of road scenes, which is crucial for applications like self-driving cars.
 
-##  Features
+## Features
+- **DeepLabV3+ Model**: Utilizes TensorFlow for training and inference.
+- **Label Definitions**: Includes detailed label definitions for various road scene elements such as roads, vehicles, and barriers.
+- **Optimized Segmentation**: Implements efficient segmentation map conversion and data handling.
+- **Visualization Tools**: Provides tools to visualize segmentation results.
+- **Streamlit App**: Interactive web application for testing and visualizing segmentation results.
 
-### 1.  Authentication & File Upload  
-- Students securely log in and upload multiple files per assignment.  
-- Ensures confidentiality and streamlines the submission process.
+## Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-repo/image-segmentation.git
+   ```
+2. Install the required dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-### 2.  Late Submission Detection  
-- Automatically checks submission time against assignment deadlines.  
-- Flags late submissions for evaluators.
+## Usage
+- **Training**: Use the Jupyter Notebook `Image Segmentation DeepLabV3+ training.ipynb` to train the model.
+  - Includes setup for label definitions and optimized data collection.
+  - Provides helper functions for segmentation map conversion and image identifier extraction.
+- **Visualization**: Run the Streamlit app using:
+   ```bash
+   streamlit run streamlit_app.py
+   ```
 
-### 3.  Plagiarism Detection  
-Evaluators can check for code similarity using a **custom-built plagiarism checker**.  
-A match is flagged if similarity exceeds a defined threshold.
+## Data Preprocessing
 
-**How it works:**
--  **Porter Stemming** to normalize text  
--  **TF-IDF Vectorization**  
--  **Cosine Similarity** for comparison
+### Listing All Unique Labels
+The dataset contains various labels representing different elements in road scenes. The preprocessing step involves listing all unique labels present in the dataset.
 
-### 4. Auto-Grading with Test Cases  
-- Runs submitted code against provided test cases.  
-- Compares outputs and shows pass/fail status.  
-- Displays any syntax errors for quick debugging.
+### Creating Hugging Face Datasets
+The dataset is converted into Hugging Face `Dataset` format for efficient handling and split into training, validation, and test sets.
 
-### 5.  Review & Feedback  
-The system evaluates:
-- 75 points for Test Case Accuracy  
-- 25 points for Code Quality & Documentation
+### Mapping IDs to Labels
+A mapping is created to hash IDs to their corresponding labels.
 
-**C++ Code Quality Metrics:**
--  Comment-to-code ratio  
--  Expression complexity  
--  Indentation issues  
--  Repetition  
--  Variable naming & scoping
+### Visualizing Sample Images and Segmentation Maps
+Sample images and their segmentation maps are visualized without overlaying.
 
-> Python files are analyzed using `pylint`; C++ analysis is custom-built.
+### Optimized Data Collection
 
-### 6.  No External APIs  
-- No third-party APIs used  
-- All logic is written from scratch for **plagiarism** and **code analysis**
+The data collection process involves gathering raw images and their corresponding labels from specified directories. The images are resized to a consistent target size of `(256, 256)` for uniformity. Labels are converted into NumPy arrays using an optimized function for efficient handling.
 
----
+#### Process
+- **Directories**: Data is collected from subdirectories containing training images and label images.
+- **Matching**: Each label image is matched with its corresponding training image using a unique identifier.
+- **Conversion**: Images are resized and converted to NumPy arrays for further processing.
+- **Error Handling**: Any mismatched or problematic files are skipped to ensure smooth data collection.
 
-##  Future Updates
+#### Summary
+- **Target Image Size**: `(256, 256)`
+- **Total Samples Collected**: The number of samples collected is displayed after the process completes.
+- **Memory Cleanup**: Garbage collection is performed to free up memory after data collection.
 
-1. **Multi-language Support:** Add Java, JavaScript, etc.  
-2. **Mobile App:** Android/iOS app for submission and grading.
+## DeepLabV3+ Model
 
----
+DeepLabV3+ is an advanced semantic segmentation model designed to accurately classify pixels in images. It leverages Atrous Spatial Pyramid Pooling (ASPP) for multi-scale feature extraction and a decoder module for refining segmentation results. The model uses ResNet101 as its backbone and is ideal for applications like road scene segmentation in self-driving cars.
 
-##  Sample Credentials
+- ![DeepLabV3+ Architecture](assets/Deeplab_v3+architecture.jpg)
 
-###  Student Accounts:
-| Username     | Password   |
-|--------------|------------|
-| `s001`  | `password` |
-| `s002`       | `password` |
+### Overview
+The DeepLabV3+ model is a state-of-the-art architecture for semantic image segmentation. It combines Atrous Spatial Pyramid Pooling (ASPP) and a decoder module to achieve high-resolution segmentation results. This implementation uses TensorFlow and ResNet101 as the backbone.
 
-### TA Accounts:
-| Username     | Password   |
-|--------------|------------|
-| `ta001`      | `password` |
-| `ta002`      | `password` |
+### Features
+- **Backbone**: ResNet101 pre-trained on ImageNet.
+- **ASPP Module**: Extracts multi-scale features using atrous convolutions with different dilation rates.
+- **Decoder Module**: Refines high-resolution features for accurate segmentation.
+- **Global Average Pooling**: Captures global context information.
+- **Dropout**: Regularization to prevent overfitting.
 
----
+### Model Definition
+The model is defined with the following components:
 
-##  Installation
+#### ASPP (Atrous Spatial Pyramid Pooling)
+- Parallel atrous convolutions with dilation rates `[6, 12, 18, 24]`.
+- Global average pooling branch for capturing global context.
+- Concatenation of all ASPP outputs followed by 1x1 convolution and dropout.
 
-###  Requirements
-- Python 3.10
+#### Decoder Module
+- Upsamples ASPP output to match high-resolution features.
+- Refines high-resolution features using 1x1 convolution.
+- Combines upsampled ASPP output with refined high-resolution features.
+- Final convolutions for segmentation and upsampling to input image resolution.
 
-###  Install Dependencies
-```bash
-pip install -r requirements.txt
-```
-Run using
-```
-streamlit run Login.py
-```
-### Contributors
+### Checkpoint Handling
+The model checks for existing checkpoints and loads them if available. Otherwise, it creates a new model instance.
 
-Jaismeen Kaur – 230121030
+## Training Results
+After 30 epochs:
+- Train Loss: 0.2826, Train Accuracy: 0.9314
+- Validation Loss: 0.2825, Validation Accuracy: 0.9314
 
-Shrish Uttarwar – 230101108
+- ![Input Image](assets/image1.png)
+- ![Ground Truth Mask](assets/image2.png)
+- ![Predicted Mask](assets/image3.png)
 
+## Requirements
+See `requirements.txt` for a list of dependencies.
 
-
+## License
+This project is licensed under the MIT License.
