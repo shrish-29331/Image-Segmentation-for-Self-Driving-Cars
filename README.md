@@ -103,6 +103,12 @@ After 30 epochs:
 - ![Ground Truth Mask](assets/image2.png)
 - ![Predicted Mask](assets/image3.png)
 
+## Contributors
+
+* **Shrish Uttarwar** — [GitHub](https://github.com/shrish-29331)
+* **Jasvindar Singh** — [GitHub](https://github.com/jasvindar123)
+* **Jaismeen Kaur** — [GitHub](https://github.com/jais2615)
+
 ## Requirements
 See `requirements.txt` for a list of dependencies.
 
